@@ -13,7 +13,7 @@ class NewStandardCell: UITableViewCell {
     var keyLabel: UILabel!
     var valueTextField: UITextField!
    
-    override init() {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Default, reuseIdentifier: "NewStandardCell")
         
         self.backgroundColor = UIColor.clearColor()

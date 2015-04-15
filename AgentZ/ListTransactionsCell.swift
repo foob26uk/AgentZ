@@ -19,7 +19,7 @@ class ListTransactionsCell: UITableViewCell {
     var brokerFollowupLabel: UILabel!
     var agentFollowupLabel: UILabel!
     
-    override init() {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Default, reuseIdentifier: "ListTransactionsCell")
 
         self.backgroundColor = UIColor(red: 226/255, green: 232/255, blue: 202/255, alpha: 1.0)

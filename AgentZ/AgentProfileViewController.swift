@@ -65,7 +65,8 @@ class AgentProfileViewController: UIViewController, UITableViewDelegate, UITable
         return cell!
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: ProfileCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = cell as! ProfileCell
         let property = user.properties[indexPath.row]
         
         let tableWidth = profileTableView.frame.width

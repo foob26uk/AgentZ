@@ -87,8 +87,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         self.view.backgroundColor = UIColor(red: 226/255, green: 232/255, blue: 202/255, alpha: 1.0)
 
         if agent.name == "" {
-            agent.name = PFUser.currentUser().objectForKey("name") as String
-            agent.title = PFUser.currentUser().objectForKey("title") as String
+            agent.name = PFUser.currentUser().objectForKey("name") as! String
+            agent.title = PFUser.currentUser().objectForKey("title") as! String
             nameLabel.text = agent.name
             
             for index in 0..<agent.properties.count {
@@ -116,7 +116,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         return cell!
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: ProfileCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = cell as! ProfileCell
         let property = agent.properties[indexPath.row]
         
         let tableWidth = profileTableView.frame.width
@@ -158,7 +159,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "gotoUpdateProfile" {
-            let vc = segue.destinationViewController as UpdateProfileViewController
+            let vc = segue.destinationViewController as! UpdateProfileViewController
             vc.propertyIndex = rowMostRecentlyTapped
         }
     }
@@ -171,8 +172,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         self.presentViewController(imagePicker, animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: NSDictionary) {
-        let pickedImage: UIImage = info.objectForKey(UIImagePickerControllerOriginalImage) as UIImage
+//    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: NSDictionary) {
+//        let pickedImage: UIImage = info.objectForKey(UIImagePickerControllerOriginalImage) as UIImage
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        let pickedImage: UIImage = info[UIImagePickerControllerOriginalImage] as! UIImage
         let scaledImage = self.scaleImageWith(pickedImage, and: CGSizeMake(100, 100))
         let imageData = UIImagePNGRepresentation(scaledImage)
         let imageFile: PFFile = PFFile(name: "profileImage.png", data: imageData) // could name the file when creating it too

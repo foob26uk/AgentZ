@@ -18,7 +18,7 @@ class LogCell: UITableViewCell {
     
     var cellView: UIView!
     
-    override init() {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Default, reuseIdentifier: "LogCell")
         
         self.backgroundColor = UIColor(red: 210/255, green: 203/255, blue: 177/255, alpha: 1.0)

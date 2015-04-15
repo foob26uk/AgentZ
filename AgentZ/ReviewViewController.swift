@@ -49,7 +49,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func insertRequirementAtIndex(requirement: PFObject, idx: Int) {
-        log(requirement.objectForKey("text") as String, oldValue: "ADD", newValue: "")
+        log(requirement.objectForKey("text") as! String, oldValue: "ADD", newValue: "")
         transactionRequirements.insert(requirement, atIndex: idx)
         var indexPath: NSIndexPath = NSIndexPath(forRow: idx, inSection: 0)
         reviewTableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
@@ -57,7 +57,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func removeRequirementAtIndex(idx: Int) {
-        log(transactionRequirements[idx].objectForKey("text") as String, oldValue: "REMOVE", newValue: "")
+        log(transactionRequirements[idx].objectForKey("text") as! String, oldValue: "REMOVE", newValue: "")
         transactionRequirements.removeAtIndex(idx)
         var indexPath: NSIndexPath = NSIndexPath(forRow: idx, inSection: 0)
         reviewTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
@@ -70,7 +70,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "gotoEditReview" {
-            let vc = segue.destinationViewController as EditReviewViewController
+            let vc = segue.destinationViewController as! EditReviewViewController
             vc.transactionIndex = transactionIndex
             vc.transactionRequirements = transactionRequirements
             vc.delegate = self
@@ -81,9 +81,9 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
         var foundAgentFlag = false
         var foundBrokerFlag = false
         for requirement in transactionRequirements {
-            if requirement.objectForKey("agentFlag") as Bool {
+            if requirement.objectForKey("agentFlag") as! Bool {
                 foundAgentFlag = true
-            } else if requirement.objectForKey("brokerFlag") as Bool {
+            } else if requirement.objectForKey("brokerFlag") as! Bool {
                 foundBrokerFlag = true
             }
         }
@@ -127,7 +127,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
             if success {
                 let _logEntry = LogEntry(
                     author: PFUser.currentUser(),
-                    authorName: logEntry.objectForKey("authorName") as String,
+                    authorName: logEntry.objectForKey("authorName") as! String,
                     createdAt: logEntry.createdAt,
                     sectionName: "REVIEW",
                     propertyName: form,
@@ -155,14 +155,14 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 commentAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {
                     alertAction in
                     let textFields: NSArray = commentAlert.textFields! as NSArray
-                    let commentTextField: UITextField = textFields.objectAtIndex(0) as UITextField
+                    let commentTextField: UITextField = textFields.objectAtIndex(0) as! UITextField
 
-                    let oldComment = self.transactionRequirements[indexPath.row].objectForKey("comment") as String
+                    let oldComment = self.transactionRequirements[indexPath.row].objectForKey("comment") as! String
                     self.transactionRequirements[indexPath.row]["comment"] = commentTextField.text
                     self.transactionRequirements[indexPath.row].saveInBackgroundWithBlock {
                         (success: Bool, error: NSError!) -> Void in
                         if success {
-                            self.log(self.transactionRequirements[indexPath.row].objectForKey("text") as String, oldValue: oldComment, newValue: commentTextField.text)
+                            self.log(self.transactionRequirements[indexPath.row].objectForKey("text") as! String, oldValue: oldComment, newValue: commentTextField.text)
                             self.reviewTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                         } else {
                             NSLog("%@", error)
@@ -179,7 +179,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 self.transactionRequirements[indexPath.row].saveInBackgroundWithBlock {
                     (success: Bool, error: NSError!) -> Void in
                     if success {
-                        self.log(self.transactionRequirements[indexPath.row].objectForKey("text") as String, oldValue: "SUBMIT", newValue: "")
+                        self.log(self.transactionRequirements[indexPath.row].objectForKey("text") as! String, oldValue: "SUBMIT", newValue: "")
                         self.reviewTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                         self.updateFollowupFlags()
                     } else {
@@ -189,7 +189,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
             })
             let cancelOption = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
 
-            let brokerFlag = transactionRequirements[indexPath.row].objectForKey("brokerFlag") as Bool
+            let brokerFlag = transactionRequirements[indexPath.row].objectForKey("brokerFlag") as! Bool
             if brokerFlag {
                 submitOption.enabled = false
             }
@@ -207,7 +207,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 self.transactionRequirements[indexPath.row].deleteInBackgroundWithBlock {
                     (success: Bool, error: NSError!) -> Void in
                     if success {
-                        self.log(self.transactionRequirements[indexPath.row].objectForKey("text") as String, oldValue: "REMOVE", newValue: "")
+                        self.log(self.transactionRequirements[indexPath.row].objectForKey("text") as! String, oldValue: "REMOVE", newValue: "")
                         self.transactionRequirements.removeAtIndex(indexPath.row)
                         self.reviewTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                         self.updateFollowupFlags()
@@ -224,14 +224,14 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 commentAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {
                     alertAction in
                     let textFields: NSArray = commentAlert.textFields! as NSArray
-                    let commentTextField: UITextField = textFields.objectAtIndex(0) as UITextField
+                    let commentTextField: UITextField = textFields.objectAtIndex(0) as! UITextField
 
-                    let oldComment = self.transactionRequirements[indexPath.row].objectForKey("comment") as String
+                    let oldComment = self.transactionRequirements[indexPath.row].objectForKey("comment") as! String
                     self.transactionRequirements[indexPath.row]["comment"] = commentTextField.text
                     self.transactionRequirements[indexPath.row].saveInBackgroundWithBlock {
                         (success: Bool, error: NSError!) -> Void in
                         if success {
-                            self.log(self.transactionRequirements[indexPath.row].objectForKey("text") as String, oldValue: oldComment, newValue: commentTextField.text)
+                            self.log(self.transactionRequirements[indexPath.row].objectForKey("text") as! String, oldValue: oldComment, newValue: commentTextField.text)
                             self.reviewTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                         } else {
                             NSLog("%@", error)
@@ -248,7 +248,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 self.transactionRequirements[indexPath.row].saveInBackgroundWithBlock {
                     (success: Bool, error: NSError!) -> Void in
                     if success {
-                        self.log(self.transactionRequirements[indexPath.row].objectForKey("text") as String, oldValue: "ACCEPT", newValue: "")
+                        self.log(self.transactionRequirements[indexPath.row].objectForKey("text") as! String, oldValue: "ACCEPT", newValue: "")
                         self.reviewTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                         self.updateFollowupFlags()
                     } else {
@@ -263,7 +263,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 self.transactionRequirements[indexPath.row].saveInBackgroundWithBlock {
                     (success: Bool, error: NSError!) -> Void in
                     if success {
-                        self.log(self.transactionRequirements[indexPath.row].objectForKey("text") as String, oldValue: "REJECT", newValue: "")
+                        self.log(self.transactionRequirements[indexPath.row].objectForKey("text") as! String, oldValue: "REJECT", newValue: "")
                         self.reviewTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                         self.updateFollowupFlags()
                     } else {
@@ -273,8 +273,8 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
             })
             let cancelOption = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
             
-            let agentFlag = transactionRequirements[indexPath.row].objectForKey("agentFlag") as Bool
-            let brokerFlag = transactionRequirements[indexPath.row].objectForKey("brokerFlag") as Bool
+            let agentFlag = transactionRequirements[indexPath.row].objectForKey("agentFlag") as! Bool
+            let brokerFlag = transactionRequirements[indexPath.row].objectForKey("brokerFlag") as! Bool
             
             if agentFlag {
                 rejectOption.enabled = false
@@ -301,11 +301,12 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return cell!
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: ReviewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.titleLabel.text = (transactionRequirements[indexPath.row].objectForKey("text") as String)
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = cell as! ReviewCell
+        cell.titleLabel.text = (transactionRequirements[indexPath.row].objectForKey("text") as! String)
         
-        let agentFlag = transactionRequirements[indexPath.row].objectForKey("agentFlag") as Bool
-        let brokerFlag = transactionRequirements[indexPath.row].objectForKey("brokerFlag") as Bool
+        let agentFlag = transactionRequirements[indexPath.row].objectForKey("agentFlag") as! Bool
+        let brokerFlag = transactionRequirements[indexPath.row].objectForKey("brokerFlag") as! Bool
         
         if agentFlag {
             cell.flagLabel.text = " A "
@@ -322,7 +323,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
         cell.flagLabel.frame = CGRectMake(cell.frame.width - cell.flagLabel.frame.width, 5, cell.flagLabel.frame.width, 20)
         
         cell.titleLabel.frame = CGRectMake(0, 0, cell.frame.width - cell.flagLabel.frame.width, 25)
-        let comment = transactionRequirements[indexPath.row].objectForKey("comment") as String
+        let comment = transactionRequirements[indexPath.row].objectForKey("comment") as! String
         if comment != "" {
             cell.commentLabel.text = comment
             cell.commentLabel.frame = CGRectMake(0, cell.titleLabel.frame.maxY, cell.frame.width, 20)
@@ -333,7 +334,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if (transactionRequirements[indexPath.row].objectForKey("comment") as String) != "" {
+        if (transactionRequirements[indexPath.row].objectForKey("comment") as! String) != "" {
             return 60
         } else {
             return 40

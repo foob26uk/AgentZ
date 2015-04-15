@@ -21,7 +21,8 @@ class NewCheckBoxCell: UITableViewCell {
     var delegate: NewCheckBoxCellDelegate? // the object that acts as delegate for this cell
     var indexPathTag: Int? // the tag of indexPath of tapped row
     
-    override init() {
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Default, reuseIdentifier: "NewCheckBoxCell")
         
         self.backgroundColor = UIColor.clearColor()

@@ -181,7 +181,7 @@ class NewTransactionViewController: UIViewController, UITableViewDataSource, UIT
         let textArray = transaction.properties[indexPath.section][indexPath.row + 1]
 
         if textArray.count == 2 {
-            let theCell = cell as NewStandardCell
+            let theCell = cell as! NewStandardCell
             theCell.valueTextField.delegate = self
             theCell.keyLabel.text = textArray[0]
             theCell.valueTextField.placeholder = textArray[0]
@@ -191,7 +191,7 @@ class NewTransactionViewController: UIViewController, UITableViewDataSource, UIT
             // section = tag & 0xFFFF
             // row = (tag >> 16) & 0xFFFF
         } else if textArray[2] == "ADDRESS" {
-            let theCell = cell as NewAddressCell
+            let theCell = cell as! NewAddressCell
             theCell.keyLabel.text = "address"
             theCell.streetTextField.delegate = self
             theCell.cityTextField.delegate = self
@@ -211,7 +211,7 @@ class NewTransactionViewController: UIViewController, UITableViewDataSource, UIT
             theCell.stateTextField.tag = tagValue
             theCell.zipTextField.tag = tagValue
         } else if textArray[2] == "DATE" {
-            let theCell = cell as NewDateCell
+            let theCell = cell as! NewDateCell
             theCell.keyLabel.text = textArray[0]
             if textArray[1] == "" {
                 theCell.valueLabel.text = "MM-dd-yyyy"
@@ -225,7 +225,7 @@ class NewTransactionViewController: UIViewController, UITableViewDataSource, UIT
             theCell.delegate = self
             theCell.indexPathTag = indexPath.section | indexPath.row << 16
         } else if textArray[2] == "CHECKBOX" {
-            let theCell = cell as NewCheckBoxCell
+            let theCell = cell as! NewCheckBoxCell
             theCell.keyLabel.text = textArray[0]
             if textArray[1] == "yes" {
                 theCell.checkBoxLabel.text = "\u{2612}"
@@ -237,7 +237,7 @@ class NewTransactionViewController: UIViewController, UITableViewDataSource, UIT
             theCell.delegate = self
             theCell.indexPathTag = indexPath.section | indexPath.row << 16
         } else if textArray[2] == "RADIO" {
-            let theCell = cell as NewRadioCell
+            let theCell = cell as! NewRadioCell
             theCell.keyLabel.text = textArray[3]
             if textArray[1] == "yes" {
                 theCell.radioLabel.text = "\u{25C9}"
@@ -249,7 +249,7 @@ class NewTransactionViewController: UIViewController, UITableViewDataSource, UIT
             theCell.delegate = self
             theCell.indexPathTag = indexPath.section | indexPath.row << 16
         } else if textArray[2] == "PICKER" {
-            let theCell = cell as NewPickerCell
+            let theCell = cell as! NewPickerCell
             theCell.keyLabel.text = "\(textArray[0]):"
             
             let width = newTableViewWidth - 10
@@ -299,21 +299,19 @@ class NewTransactionViewController: UIViewController, UITableViewDataSource, UIT
         return headerView
     }
     
-    func textFieldDidBeginEditing(textField: UITextField) -> Bool {
+    func textFieldDidBeginEditing(textField: UITextField) {
         textFieldBeingEdited = textField
         
         /*
         let pointInTable: CGPoint = textField.superview!.convertPoint(textField.frame.origin, toView: newTableView)
         var contentOffset: CGPoint = newTableView.contentOffset
-
+        
         let offset = screenHeight / 5
         if pointInTable.y > offset {
-            contentOffset.y = pointInTable.y - offset
-            newTableView.setContentOffset(contentOffset, animated: true)
+        contentOffset.y = pointInTable.y - offset
+        newTableView.setContentOffset(contentOffset, animated: true)
         }
         */
-        
-        return true
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
@@ -341,11 +339,11 @@ class NewTransactionViewController: UIViewController, UITableViewDataSource, UIT
             // arrays are weird in swift, when assignment, there is copying
             let textArray = transaction.properties[indexPath.section][indexPath.row + 1]
             if textArray.count == 2 {
-                let theCell = cell as NewStandardCell
+                let theCell = cell as! NewStandardCell
                 // can't assign to textArray, it's a different array after assignment, wtf (have to use NSMutableArray)
                 transaction.properties[indexPath.section][indexPath.row + 1][1] = theCell.valueTextField.text
             } else if textArray[2] == "ADDRESS" {
-                let theCell = cell as NewAddressCell
+                let theCell = cell as! NewAddressCell
                 transaction.properties[indexPath.section][indexPath.row + 1][1] = "\(theCell.streetTextField.text)|\(theCell.cityTextField.text)|\(theCell.stateTextField.text)|\(theCell.zipTextField.text)"
             }
         }
@@ -609,8 +607,8 @@ class NewTransactionViewController: UIViewController, UITableViewDataSource, UIT
                 self.pickerData = []
                 self.agents = []
                 for object in objects {
-                    let obj = object as PFUser
-                    let name = obj.objectForKey("name") as String
+                    let obj = object as! PFUser
+                    let name = obj.objectForKey("name") as! String
                     self.pickerData.append(name)
                     self.agents.append(obj)
                 }
@@ -707,7 +705,7 @@ class NewTransactionViewController: UIViewController, UITableViewDataSource, UIT
             var messageAlert: String?
 
             if agent.title == "agent" {
-                transaction.agentName = PFUser.currentUser().objectForKey("name") as String
+                transaction.agentName = PFUser.currentUser().objectForKey("name") as! String
             }
             
             if transaction.properties[1][1][1] == "|||" { // check if property address is empty
@@ -732,7 +730,7 @@ class NewTransactionViewController: UIViewController, UITableViewDataSource, UIT
                         if object != nil {
                             object.incrementKey("count")
                             object.saveInBackground()
-                            self.saveTransaction(object["count"] as Int)
+                            self.saveTransaction(object["count"] as! Int)
                         }
                     }
                 }
@@ -763,7 +761,7 @@ class NewTransactionViewController: UIViewController, UITableViewDataSource, UIT
         ParseTransaction.saveInBackgroundWithBlock {
             (success: Bool, error: NSError!) -> Void in
             if success {
-                self.transaction.transactionCount = ParseTransaction["count"] as Int
+                self.transaction.transactionCount = ParseTransaction["count"] as! Int
                 self.transaction.transactionID = ParseTransaction.objectId
                 transactions.insert(self.transaction, atIndex: 0)
                 PFTransactions.insert(ParseTransaction, atIndex: 0)
@@ -777,7 +775,7 @@ class NewTransactionViewController: UIViewController, UITableViewDataSource, UIT
                 findRequirements.findObjectsInBackgroundWithBlock {
                     (objects: [AnyObject]!, error: NSError!) -> Void in
                     if error == nil {
-                        var requirements = objects as [PFObject]
+                        var requirements = objects as! [PFObject]
                         if requirements.count > 0 {
                             ParseTransaction["agentFollowupRequired"] = true
                             ParseTransaction.saveInBackgroundWithBlock {

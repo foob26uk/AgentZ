@@ -14,7 +14,7 @@ class DocumentCell: UITableViewCell {
     var descriptionLabel: UILabel!
     var thumbnail: UIImageView!
     
-    override init() {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Default, reuseIdentifier: "DocumentCell")
         
         self.backgroundColor = UIColor.clearColor()

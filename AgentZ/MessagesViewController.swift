@@ -131,7 +131,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             PFMsg.saveInBackgroundWithBlock {
                 (success: Bool, error: NSError!) -> Void in
                 if success {
-                    var msg = Message(author: PFMsg["author"] as PFUser, authorName: PFMsg["authorName"] as String, text: PFMsg["text"] as String, createdAt: PFMsg.createdAt)
+                    var msg = Message(author: PFMsg["author"] as! PFUser, authorName: PFMsg["authorName"] as! String, text: PFMsg["text"] as! String, createdAt: PFMsg.createdAt)
 
                     self.messages.append(msg)
                     self.inputTextView.text = "" // clear after send
@@ -165,10 +165,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         findAgents.findObjectsInBackgroundWithBlock {
             (objects: [AnyObject]!, error: NSError!) -> Void in
             if error == nil {
-                let recipients = objects as [PFUser]
+                let recipients = objects as! [PFUser]
                 let recipientEmails: [String] = recipients.map {
                     user in
-                    return user["email"] as String
+                    return user["email"] as! String
                 }
                 
                 var composer = MFMailComposeViewController()
@@ -249,9 +249,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 
                 if error == nil {
                     for object in objects {
-                        let author = object.objectForKey("author") as PFUser
-                        let authorName = object.objectForKey("authorName") as String
-                        let text = object.objectForKey("text") as String
+                        let author = object.objectForKey("author") as! PFUser
+                        let authorName = object.objectForKey("authorName") as! String
+                        let text = object.objectForKey("text") as! String
                         let createdAt = object.createdAt
                         let msg = Message(author: author, authorName: authorName, text: text, createdAt: createdAt)
                         
@@ -288,7 +288,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     
     let labelHeight = CGFloat(20)
     
-    func tableView(tableView: UITableView, willDisplayCell cell: MessagesCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = cell as! MessagesCell
         let entry = messages[indexPath.row]
         
         cell.keyLabel.text = entry.authorName

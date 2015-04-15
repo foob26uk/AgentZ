@@ -13,7 +13,7 @@ class ProfileCell: UITableViewCell {
     var keyLabel: UILabel!
     var valueLabel: UILabel!
     
-    override init() {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Default, reuseIdentifier: "ProfileCell")
         
         self.backgroundColor = UIColor.clearColor()

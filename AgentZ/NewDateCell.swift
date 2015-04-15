@@ -20,7 +20,7 @@ class NewDateCell: UITableViewCell {
     var delegate: NewDateCellDelegate? // the object that acts as delegate for this cell
     var indexPathTag: Int? // the tag of indexPath of tapped row
     
-    override init() {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Default, reuseIdentifier: "NewDateCell")
         
         self.backgroundColor = UIColor.clearColor()

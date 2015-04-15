@@ -131,14 +131,14 @@ class LogViewController: UIViewController, UITableViewDataSource, UITableViewDel
                 if error == nil {
                     for object in objects {
                         let theLogEntry = LogEntry(
-                            author: object.objectForKey("author") as PFUser,
-                            authorName: object.objectForKey("authorName") as String,
+                            author: object.objectForKey("author") as! PFUser,
+                            authorName: object.objectForKey("authorName") as! String,
                             createdAt: object.createdAt,
-                            sectionName: object.objectForKey("sectionName") as String,
-                            propertyName: object.objectForKey("propertyName") as String,
-                            oldValue: object.objectForKey("oldValue") as String,
-                            newValue: object.objectForKey("newValue") as String,
-                            propertyType: object.objectForKey("propertyType") as String)
+                            sectionName: object.objectForKey("sectionName") as! String,
+                            propertyName: object.objectForKey("propertyName") as! String,
+                            oldValue: object.objectForKey("oldValue") as! String,
+                            newValue: object.objectForKey("newValue") as! String,
+                            propertyType: object.objectForKey("propertyType") as! String)
                         
                         self.log.append(theLogEntry)
                     }

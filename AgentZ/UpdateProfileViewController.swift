@@ -173,17 +173,17 @@ class UpdateProfileViewController: UIViewController {
             }
         } else if propertyType == "PHONE" {
             value = valueTextField.text.stringByReplacingOccurrencesOfString("[^0-9]", withString: "", options: .RegularExpressionSearch, range: nil)
-            if countElements(value) != 10 {
+            if count(value) != 10 {
                 alert = "Invalid Number Of Digits"
             }
         } else if propertyType == "EMAIL" {
-            if countElements(valueTextField.text.componentsSeparatedByString(" ")) != 1 {
+            if count(valueTextField.text.componentsSeparatedByString(" ")) != 1 {
                 alert = "No White Spaces Allowed"
-            } else if countElements(valueTextField.text.componentsSeparatedByString("@")) != 2 {
+            } else if count(valueTextField.text.componentsSeparatedByString("@")) != 2 {
                 alert = "Invalid Email Format"
             }
         } else if propertyType == "USERNAME" {
-            if countElements(valueTextField.text.componentsSeparatedByString(" ")) != 1 {
+            if count(valueTextField.text.componentsSeparatedByString(" ")) != 1 {
                 alert = "No White Spaces Allowed"
             }
         } else if propertyType == "PASSWORD" {
@@ -201,7 +201,7 @@ class UpdateProfileViewController: UIViewController {
             
         } else {
             // authenticates user by login, failed login doesn't logout user
-            let username = PFUser.currentUser()["username"] as String
+            let username = PFUser.currentUser()["username"] as! String
             PFUser.logInWithUsernameInBackground(username, password: passwordTextField.text) {
                 (user: PFUser!, error: NSError!) -> Void in
                 if error != nil {

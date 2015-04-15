@@ -46,7 +46,7 @@ class EditReviewViewController: UIViewController, UITableViewDelegate, UITableVi
         
         var rDict = [String: PFObject]()
         for req in transactionRequirements {
-            let key: String = (req.objectForKey("requirement") as PFObject).objectId as String
+            let key: String = (req.objectForKey("requirement") as! PFObject).objectId as String
             rDict[key] = req
         }
         
@@ -67,7 +67,7 @@ class EditReviewViewController: UIViewController, UITableViewDelegate, UITableVi
         findRequirements.findObjectsInBackgroundWithBlock {
             (objects: [AnyObject]!, error: NSError!) -> Void in
             if error == nil {
-                self.requirements = objects as [PFObject]
+                self.requirements = objects as! [PFObject]
                 self.requirementsSelected = [Bool](count: objects.count, repeatedValue: false)
                 self.editTableView.reloadData()
                 self.findSelectedRequirements()
@@ -83,7 +83,7 @@ class EditReviewViewController: UIViewController, UITableViewDelegate, UITableVi
             // removing
             var idx: Int!
             for (i, req) in enumerate(transactionRequirements) {
-                if (req.objectForKey("requirement") as PFObject).objectId == requirements[indexPath.row].objectId {
+                if (req.objectForKey("requirement") as! PFObject).objectId == requirements[indexPath.row].objectId {
                     idx = i
                     break
                 }
@@ -115,9 +115,9 @@ class EditReviewViewController: UIViewController, UITableViewDelegate, UITableVi
                 (success: Bool, error: NSError!) -> Void in
                 if success {
                     var idx: Int = 0
-                    let text = newRequirement.objectForKey("text") as String
+                    let text = newRequirement.objectForKey("text") as! String
                     while idx < self.transactionRequirements.count {
-                        if text < (self.transactionRequirements[idx].objectForKey("text") as String) {
+                        if text < (self.transactionRequirements[idx].objectForKey("text") as! String) {
                             break
                         }
                         idx++
@@ -150,7 +150,7 @@ class EditReviewViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.textLabel!.text = (requirements[indexPath.row].objectForKey("text") as String)
+        cell.textLabel!.text = (requirements[indexPath.row].objectForKey("text") as! String)
         
         if requirementsSelected[indexPath.row] {
             cell.accessoryType = UITableViewCellAccessoryType.Checkmark

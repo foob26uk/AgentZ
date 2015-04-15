@@ -15,7 +15,7 @@ class AgentCell: UITableViewCell {
     var emailLabel: UILabel!
     var phoneLabel: UILabel!
     
-    override init() {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Default, reuseIdentifier: "AgentCell")
         
         self.backgroundColor = UIColor.clearColor()

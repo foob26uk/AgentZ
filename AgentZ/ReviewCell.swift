@@ -15,7 +15,7 @@ class ReviewCell: UITableViewCell {
     
     var flagLabel: UILabel!
     
-    override init() {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Default, reuseIdentifier: "ReviewCell")
         
         self.backgroundColor = UIColor.clearColor()

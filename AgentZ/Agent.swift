@@ -24,7 +24,7 @@ class Agent {
     ]
 
     class func getFormattedPhone(phone: String) -> String {
-        if countElements(phone) != 10 {
+        if count(phone) != 10 {
             return ""
         }
         
@@ -40,7 +40,7 @@ class Agent {
     class func getFormattedAddress(address: String) -> String {
         var addressArray = address.componentsSeparatedByString("|")
 
-        if countElements(addressArray) == 4 {
+        if count(addressArray) == 4 {
             addressArray.insert(" ", atIndex: 3)
             addressArray.insert(", ", atIndex: 2)
             addressArray.insert("\n", atIndex: 1)
@@ -52,7 +52,7 @@ class Agent {
     
     class func getStreet(address: String) -> String {
         let addressArray = address.componentsSeparatedByString("|")
-        if countElements(addressArray) == 4 {
+        if count(addressArray) == 4 {
             return addressArray[0]
         }
         return ""
@@ -60,7 +60,7 @@ class Agent {
 
     class func getCity(address: String) -> String {
         let addressArray = address.componentsSeparatedByString("|")
-        if countElements(addressArray) == 4 {
+        if count(addressArray) == 4 {
             return addressArray[1]
         }
         return ""
@@ -68,7 +68,7 @@ class Agent {
     
     class func getState(address: String) -> String {
         let addressArray = address.componentsSeparatedByString("|")
-        if countElements(addressArray) == 4 {
+        if count(addressArray) == 4 {
             return addressArray[2]
         }
         return ""
@@ -76,7 +76,7 @@ class Agent {
     
     class func getZip(address: String) -> String {
         let addressArray = address.componentsSeparatedByString("|")
-        if countElements(addressArray) == 4 {
+        if count(addressArray) == 4 {
             return addressArray[3]
         }
         return ""

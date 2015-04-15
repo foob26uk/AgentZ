@@ -91,18 +91,18 @@ class ListTransactionsViewController: UIViewController, UITableViewDataSource, U
                     
                     for object in objects {
                         var onlineTransaction = Transaction()
-                        onlineTransaction.transactionCount = object.objectForKey("count") as Int
+                        onlineTransaction.transactionCount = object.objectForKey("count") as! Int
                         onlineTransaction.transactionID = object.objectId as String
-                        onlineTransaction.properties = object.objectForKey("properties") as [[[String]]]
-                        onlineTransaction.status = object.objectForKey("status") as String
-                        onlineTransaction.agentFollowupRequired = object.objectForKey("agentFollowupRequired") as Bool
-                        onlineTransaction.brokerFollowupRequired = object.objectForKey("brokerFollowupRequired") as Bool
-                        onlineTransaction.agent = object.objectForKey("agent") as PFUser
-                        onlineTransaction.agentName = object.objectForKey("agentName") as String
+                        onlineTransaction.properties = object.objectForKey("properties") as! [[[String]]]
+                        onlineTransaction.status = object.objectForKey("status") as! String
+                        onlineTransaction.agentFollowupRequired = object.objectForKey("agentFollowupRequired") as! Bool
+                        onlineTransaction.brokerFollowupRequired = object.objectForKey("brokerFollowupRequired") as! Bool
+                        onlineTransaction.agent = object.objectForKey("agent") as! PFUser
+                        onlineTransaction.agentName = object.objectForKey("agentName") as! String
                         onlineTransaction.creationDate = object.createdAt
 
                         transactions.append(onlineTransaction)
-                        PFTransactions.append(object as PFObject)
+                        PFTransactions.append(object as! PFObject)
                     }
 
                     if objects.count < findParseTransactions.limit {
@@ -138,18 +138,18 @@ class ListTransactionsViewController: UIViewController, UITableViewDataSource, U
                 if error == nil {
                     for object in objects {
                         var onlineTransaction = Transaction()
-                        onlineTransaction.transactionCount = object.objectForKey("count") as Int
+                        onlineTransaction.transactionCount = object.objectForKey("count") as! Int
                         onlineTransaction.transactionID = object.objectId as String
-                        onlineTransaction.properties = object.objectForKey("properties") as [[[String]]]
-                        onlineTransaction.status = object.objectForKey("status") as String
-                        onlineTransaction.agentFollowupRequired = object.objectForKey("agentFollowupRequired") as Bool
-                        onlineTransaction.brokerFollowupRequired = object.objectForKey("brokerFollowupRequired") as Bool
-                        onlineTransaction.agent = object.objectForKey("agent") as PFUser
-                        onlineTransaction.agentName = object.objectForKey("agentName") as String
+                        onlineTransaction.properties = object.objectForKey("properties") as! [[[String]]]
+                        onlineTransaction.status = object.objectForKey("status") as! String
+                        onlineTransaction.agentFollowupRequired = object.objectForKey("agentFollowupRequired") as! Bool
+                        onlineTransaction.brokerFollowupRequired = object.objectForKey("brokerFollowupRequired") as! Bool
+                        onlineTransaction.agent = object.objectForKey("agent") as! PFUser
+                        onlineTransaction.agentName = object.objectForKey("agentName") as! String
                         onlineTransaction.creationDate = object.createdAt
                         
                         transactions.append(onlineTransaction)
-                        PFTransactions.append(object as PFObject)
+                        PFTransactions.append(object as! PFObject)
                     }
                     
                     if objects.count < findParseTransactions.limit {
@@ -197,7 +197,7 @@ class ListTransactionsViewController: UIViewController, UITableViewDataSource, U
         let transaction = transactions[indexPath.row]
 
         if agent.title == "agent" {
-            let _cell = cell as ListTransactionsCell
+            let _cell = cell as! ListTransactionsCell
 
             _cell.addressLabel.text = transaction.getFormattedAddress()
             
@@ -236,7 +236,7 @@ class ListTransactionsViewController: UIViewController, UITableViewDataSource, U
             }
             
         } else {
-            let _cell = cell as ListTransactionsBrokerCell
+            let _cell = cell as! ListTransactionsBrokerCell
 
             _cell.addressLabel.text = transaction.getFormattedAddress()
             
@@ -288,9 +288,9 @@ class ListTransactionsViewController: UIViewController, UITableViewDataSource, U
         
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "gotoDetails" {
-            let tb = segue.destinationViewController as UITabBarController
+            let tb = segue.destinationViewController as! UITabBarController
             if let vcArray = tb.viewControllers {
-                let vc = vcArray[0] as DetailsViewController
+                let vc = vcArray[0] as! DetailsViewController
                 //tb.delegate = vc
                 vc.transactionIndex = rowMostRecentlyTapped
                 vc.transactionUpdated = false

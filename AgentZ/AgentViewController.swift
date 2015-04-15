@@ -63,7 +63,7 @@ class AgentViewController: UIViewController, UITableViewDelegate, UITableViewDat
         findAgents.findObjectsInBackgroundWithBlock {
             (objects: [AnyObject]!, error: NSError!) -> Void in
             if error == nil {
-                self.agents = objects as [PFUser]
+                self.agents = objects as! [PFUser]
                 self.agentTableView.reloadData()
             } else {
                 NSLog("%@", error)
@@ -74,8 +74,8 @@ class AgentViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         searchArray = agents.filter {
             (agent: PFUser) -> Bool in
-            let name = agent.objectForKey("name") as String
-            let title = agent.objectForKey("title") as String
+            let name = agent.objectForKey("name") as! String
+            let title = agent.objectForKey("title") as! String
             if name.rangeOfString(self.agentSearchController.searchBar.text, options: NSStringCompareOptions.RegularExpressionSearch) != nil || title.rangeOfString(self.agentSearchController.searchBar.text, options: NSStringCompareOptions.RegularExpressionSearch) != nil {
                 return true
             }
@@ -89,7 +89,7 @@ class AgentViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "gotoAgentProfile" {
-            let vc = segue.destinationViewController as AgentProfileViewController
+            let vc = segue.destinationViewController as! AgentProfileViewController
             
             var _agent: PFUser!
             if agentSearchController.active {
@@ -99,8 +99,8 @@ class AgentViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         
             var user = Agent()
-            user.name = _agent.objectForKey("name") as String
-            user.title = _agent.objectForKey("title") as String
+            user.name = _agent.objectForKey("name") as! String
+            user.title = _agent.objectForKey("title") as! String
             
             if let _imageFile = _agent.objectForKey("profileImage") as? PFFile {
                 _imageFile.getDataInBackgroundWithBlock {
@@ -148,17 +148,18 @@ class AgentViewController: UIViewController, UITableViewDelegate, UITableViewDat
         return cell!
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: AgentCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = cell as! AgentCell
         var agent: PFUser!
         if agentSearchController.active {
             agent = searchArray[indexPath.row]
         } else {
             agent = agents[indexPath.row]
         }
-        cell.nameLabel.text = (agent.objectForKey("name") as String)
-        cell.titleLabel.text = (agent.objectForKey("title") as String)
-        cell.emailLabel.text = (agent.objectForKey("email") as String)
-        cell.phoneLabel.text = Agent.getFormattedPhone(agent.objectForKey("phone") as String)
+        cell.nameLabel.text = (agent.objectForKey("name") as! String)
+        cell.titleLabel.text = (agent.objectForKey("title") as! String)
+        cell.emailLabel.text = (agent.objectForKey("email") as! String)
+        cell.phoneLabel.text = Agent.getFormattedPhone(agent.objectForKey("phone") as! String)
         
         let labelHeight = CGFloat(20)
         let tableWidth = agentTableView.frame.width

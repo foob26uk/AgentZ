@@ -52,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         
         let paths:NSArray = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-        var documentsDirectory: String = paths[0] as String
+        var documentsDirectory: String = paths[0] as! String
         var inboxPath = documentsDirectory.stringByAppendingPathComponent("Inbox")
         let dirFiles = filemgr.contentsOfDirectoryAtPath(inboxPath, error: nil)
         
@@ -63,7 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let myFileName = url.lastPathComponent {
             if let _dirFiles = dirFiles {
                 for aFile in _dirFiles {
-                    let _aFile = aFile as String
+                    let _aFile = aFile as! String
 
                     if myFileName == _aFile {
                         if let myFile: NSData = filemgr.contentsAtPath(myFileName) {

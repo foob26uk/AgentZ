@@ -51,24 +51,24 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
 
         // to pass data to the other VCs
         let tb = self.tabBarController!
-        let vcArray = tb.viewControllers as [UIViewController]
+        let vcArray = tb.viewControllers as! [UIViewController]
         
-        let _logVC = vcArray[3] as LogViewController
+        let _logVC = vcArray[3] as! LogViewController
         _logVC.transactionIndex = transactionIndex
         logVC = _logVC
         loadLogFromOnline()
 
-        let reviewVC = vcArray[4] as ReviewViewController
+        let reviewVC = vcArray[4] as! ReviewViewController
         reviewVC.transactionIndex = transactionIndex
         reviewVC.logVC = _logVC
         loadReviewFromOnline(reviewVC)
         
-        let docsVC = vcArray[2] as DocumentsViewController
+        let docsVC = vcArray[2] as! DocumentsViewController
         docsVC.transactionIndex = transactionIndex
         docsVC.logVC = _logVC
         loadDocumentsFromOnline(docsVC)
         
-        let messagesVC = vcArray[1] as MessagesViewController
+        let messagesVC = vcArray[1] as! MessagesViewController
         messagesVC.transactionIndex = transactionIndex
         loadMessagesFromOnline(messagesVC)
         
@@ -165,14 +165,14 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 for object in objects {
                     let theLogEntry = LogEntry(
-                        author: object.objectForKey("author") as PFUser,
-                        authorName: object.objectForKey("authorName") as String,
+                        author: object.objectForKey("author") as! PFUser,
+                        authorName: object.objectForKey("authorName") as! String,
                         createdAt: object.createdAt,
-                        sectionName: object.objectForKey("sectionName") as String,
-                        propertyName: object.objectForKey("propertyName") as String,
-                        oldValue: object.objectForKey("oldValue") as String,
-                        newValue: object.objectForKey("newValue") as String,
-                        propertyType: object.objectForKey("propertyType") as String)
+                        sectionName: object.objectForKey("sectionName") as! String,
+                        propertyName: object.objectForKey("propertyName") as! String,
+                        oldValue: object.objectForKey("oldValue") as! String,
+                        newValue: object.objectForKey("newValue") as! String,
+                        propertyType: object.objectForKey("propertyType") as! String)
                     
                     self.logVC.log.append(theLogEntry)
                 }
@@ -196,7 +196,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         findRequirements.findObjectsInBackgroundWithBlock {
             (objects: [AnyObject]!, error: NSError!) -> Void in
             if error == nil {
-                reviewVC.transactionRequirements = objects as [PFObject]
+                reviewVC.transactionRequirements = objects as! [PFObject]
             } else {
                 NSLog("%@", error)
             }
@@ -219,8 +219,8 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
                 docsVC.docs = []
                 
                 for object in objects {
-                    let _name = object.objectForKey("name") as String
-                    let _description = object.objectForKey("description") as String
+                    let _name = object.objectForKey("name") as! String
+                    let _description = object.objectForKey("description") as! String
                     let _doc = Document(name: _name, description: _description)
                     let _thumbnail = object.objectForKey("thumbnail") as? PFFile
                     if let thumbnail = _thumbnail {
@@ -234,7 +234,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
                         }
                     }
                     docsVC.docs.append(_doc)
-                    docsVC.docObjects.append(object as PFObject)
+                    docsVC.docObjects.append(object as! PFObject)
                 }
                 
                 if objects.count < findParseDocuments.limit {
@@ -261,9 +261,9 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
                 messagesVC.messages =  []
                 
                 for object in objects {
-                    let author = object.objectForKey("author") as PFUser
-                    let authorName = object.objectForKey("authorName") as String
-                    let text = object.objectForKey("text") as String
+                    let author = object.objectForKey("author") as! PFUser
+                    let authorName = object.objectForKey("authorName") as! String
+                    let text = object.objectForKey("text") as! String
                     let createdAt = object.createdAt
                     let msg = Message(author: author, authorName: authorName, text: text, createdAt: createdAt)
                     
@@ -338,7 +338,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.backgroundColor = UIColor.clearColor()
         
         if textArray.count == 2 {
-            let theCell = cell as NewStandardCell
+            let theCell = cell as! NewStandardCell
             theCell.valueTextField.delegate = self
             theCell.keyLabel.text = textArray[0]
             theCell.valueTextField.placeholder = textArray[0]
@@ -348,7 +348,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             // section = tag & 0xFFFF
             // row = (tag >> 16) & 0xFFFF
         } else if textArray[2] == "ADDRESS" {
-            let theCell = cell as NewAddressCell
+            let theCell = cell as! NewAddressCell
             theCell.keyLabel.text = "address"
             theCell.streetTextField.delegate = self
             theCell.cityTextField.delegate = self
@@ -368,7 +368,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             theCell.stateTextField.tag = tagValue
             theCell.zipTextField.tag = tagValue
         } else if textArray[2] == "DATE" {
-            let theCell = cell as NewDateCell
+            let theCell = cell as! NewDateCell
             theCell.keyLabel.text = textArray[0]
             if textArray[1] == "" {
                 theCell.valueLabel.text = "MM-dd-yyyy"
@@ -382,7 +382,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             theCell.delegate = self
             theCell.indexPathTag = indexPath.section | indexPath.row << 16
         } else if textArray[2] == "CHECKBOX" {
-            let theCell = cell as NewCheckBoxCell
+            let theCell = cell as! NewCheckBoxCell
             theCell.keyLabel.text = textArray[0]
             if textArray[1] == "yes" {
                 theCell.checkBoxLabel.text = "\u{2612}"
@@ -394,7 +394,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             theCell.delegate = self
             theCell.indexPathTag = indexPath.section | indexPath.row << 16
         } else if textArray[2] == "RADIO" {
-            let theCell = cell as NewRadioCell
+            let theCell = cell as! NewRadioCell
             theCell.keyLabel.text = textArray[3]
             if textArray[1] == "yes" {
                 theCell.radioLabel.text = "\u{25C9}"
@@ -406,7 +406,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             theCell.delegate = self
             theCell.indexPathTag = indexPath.section | indexPath.row << 16
         }  else if textArray[2] == "PICKER" {
-            let theCell = cell as NewPickerCell
+            let theCell = cell as! NewPickerCell
             theCell.keyLabel.text = "\(textArray[0]):"
             
             let width = newTableViewWidth - 10
@@ -496,13 +496,13 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         let section = indexPath.section
         let row = indexPath.row
         if textArray.count == 2 {
-            let theCell = cell as NewStandardCell
+            let theCell = cell as! NewStandardCell
             if transaction.properties[section][row + 1][1] != theCell.valueTextField.text {
                 logChange(section, row: row + 1, oldValue: transaction.properties[section][row + 1][1], newValue: theCell.valueTextField.text)
                 transaction.properties[section][row + 1][1] = theCell.valueTextField.text
             }
         } else if textArray[2] == "ADDRESS" {
-            let theCell = cell as NewAddressCell
+            let theCell = cell as! NewAddressCell
             var newAddress = "\(theCell.streetTextField.text)|\(theCell.cityTextField.text)|\(theCell.stateTextField.text)|\(theCell.zipTextField.text)"
             if transaction.properties[section][row + 1][1] != newAddress {
                 logChange(section, row: row + 1, oldValue: transaction.properties[section][row + 1][1], newValue: newAddress)
@@ -531,14 +531,14 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             (success: Bool, error: NSError!) -> Void in
             if success {
                 let theLogEntry = LogEntry(
-                    author: PFLogEntry["author"] as PFUser,
-                    authorName: PFLogEntry["authorName"] as String,
+                    author: PFLogEntry["author"] as! PFUser,
+                    authorName: PFLogEntry["authorName"] as! String,
                     createdAt: PFLogEntry.createdAt,
-                    sectionName: PFLogEntry["sectionName"] as String,
-                    propertyName: PFLogEntry["propertyName"] as String,
-                    oldValue: PFLogEntry["oldValue"] as String,
-                    newValue: PFLogEntry["newValue"] as String,
-                    propertyType: PFLogEntry["propertyType"] as String)
+                    sectionName: PFLogEntry["sectionName"] as! String,
+                    propertyName: PFLogEntry["propertyName"] as! String,
+                    oldValue: PFLogEntry["oldValue"] as! String,
+                    newValue: PFLogEntry["newValue"] as! String,
+                    propertyType: PFLogEntry["propertyType"] as! String)
 
                 self.logVC.log.insert(theLogEntry, atIndex: 0)
                 self.logVC.logTableView.reloadData()
@@ -811,8 +811,8 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.pickerData = []
                 self.agents = []
                 for object in objects {
-                    let obj = object as PFUser
-                    let name = obj.objectForKey("name") as String
+                    let obj = object as! PFUser
+                    let name = obj.objectForKey("name") as! String
                     self.pickerData.append(name)
                     self.agents.append(obj)
                 }
@@ -893,14 +893,14 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
                     self.transaction.agent = self.agents[idx]
                     self.transactionUpdated = true
                     let theLogEntry = LogEntry(
-                        author: PFLogEntry["author"] as PFUser,
-                        authorName: PFLogEntry["authorName"] as String,
+                        author: PFLogEntry["author"] as! PFUser,
+                        authorName: PFLogEntry["authorName"] as! String,
                         createdAt: PFLogEntry.createdAt,
-                        sectionName: PFLogEntry["sectionName"] as String,
-                        propertyName: PFLogEntry["propertyName"] as String,
-                        oldValue: PFLogEntry["oldValue"] as String,
-                        newValue: PFLogEntry["newValue"] as String,
-                        propertyType: PFLogEntry["propertyType"] as String)
+                        sectionName: PFLogEntry["sectionName"] as! String,
+                        propertyName: PFLogEntry["propertyName"] as! String,
+                        oldValue: PFLogEntry["oldValue"] as! String,
+                        newValue: PFLogEntry["newValue"] as! String,
+                        propertyType: PFLogEntry["propertyType"] as! String)
                     
                     self.logVC.log.insert(theLogEntry, atIndex: 0)
                     self.logVC.logTableView.reloadData()
@@ -990,14 +990,14 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
                     self.transaction.status = status
                     self.transactionUpdated = true
                     let theLogEntry = LogEntry(
-                        author: PFLogEntry["author"] as PFUser,
-                        authorName: PFLogEntry["authorName"] as String,
+                        author: PFLogEntry["author"] as! PFUser,
+                        authorName: PFLogEntry["authorName"] as! String,
                         createdAt: PFLogEntry.createdAt,
-                        sectionName: PFLogEntry["sectionName"] as String,
-                        propertyName: PFLogEntry["propertyName"] as String,
-                        oldValue: PFLogEntry["oldValue"] as String,
-                        newValue: PFLogEntry["newValue"] as String,
-                        propertyType: PFLogEntry["propertyType"] as String)
+                        sectionName: PFLogEntry["sectionName"] as! String,
+                        propertyName: PFLogEntry["propertyName"] as! String,
+                        oldValue: PFLogEntry["oldValue"] as! String,
+                        newValue: PFLogEntry["newValue"] as! String,
+                        propertyType: PFLogEntry["propertyType"] as! String)
                     
                     self.logVC.log.insert(theLogEntry, atIndex: 0)
                     self.logVC.logTableView.reloadData()

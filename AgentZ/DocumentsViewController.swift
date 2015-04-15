@@ -96,8 +96,8 @@ class DocumentsViewController: UIViewController, UITableViewDataSource, UITableV
                 
                 if error == nil {
                     for object in objects {
-                        let _name = object.objectForKey("name") as String
-                        let _description = object.objectForKey("description") as String
+                        let _name = object.objectForKey("name") as! String
+                        let _description = object.objectForKey("description") as! String
                         let _doc = Document(name: _name, description: _description)
                         let _thumbnail = object.objectForKey("thumbnail") as? PFFile
                         if let thumbnail = _thumbnail {
@@ -111,7 +111,7 @@ class DocumentsViewController: UIViewController, UITableViewDataSource, UITableV
                             }
                         }
                         self.docs.append(_doc)
-                        self.docObjects.append(object as PFObject)
+                        self.docObjects.append(object as! PFObject)
                     }
 
                     if objects.count < findParseDocuments.limit {
@@ -149,14 +149,14 @@ class DocumentsViewController: UIViewController, UITableViewDataSource, UITableV
             (success: Bool, error: NSError!) -> Void in
             if success {
                 let theLogEntry = LogEntry(
-                    author: PFLogEntry["author"] as PFUser,
-                    authorName: PFLogEntry["authorName"] as String,
+                    author: PFLogEntry["author"] as! PFUser,
+                    authorName: PFLogEntry["authorName"] as! String,
                     createdAt: PFLogEntry.createdAt,
-                    sectionName: PFLogEntry["sectionName"] as String,
-                    propertyName: PFLogEntry["propertyName"] as String,
-                    oldValue: PFLogEntry["oldValue"] as String,
-                    newValue: PFLogEntry["newValue"] as String,
-                    propertyType: PFLogEntry["propertyType"] as String)
+                    sectionName: PFLogEntry["sectionName"] as! String,
+                    propertyName: PFLogEntry["propertyName"] as! String,
+                    oldValue: PFLogEntry["oldValue"] as! String,
+                    newValue: PFLogEntry["newValue"] as! String,
+                    propertyType: PFLogEntry["propertyType"] as! String)
                 
                 self.logVC.log.insert(theLogEntry, atIndex: 0)
                 self.logVC.logTableView.reloadData()
@@ -176,7 +176,7 @@ class DocumentsViewController: UIViewController, UITableViewDataSource, UITableV
             descriptionAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {
                 alertAction in
                 let textFields: NSArray = descriptionAlert.textFields! as NSArray
-                let descriptionTextfield: UITextField = textFields.objectAtIndex(0) as UITextField
+                let descriptionTextfield: UITextField = textFields.objectAtIndex(0) as! UITextField
                 self.addFile(descriptionTextfield.text)
                 
             }))
@@ -196,8 +196,8 @@ class DocumentsViewController: UIViewController, UITableViewDataSource, UITableV
             (success: Bool, error: NSError!) -> Void in
             if success {
                 var doc: Document = Document(
-                    name: PFdoc["name"] as String,
-                    description: PFdoc["description"] as String)
+                    name: PFdoc["name"] as! String,
+                    description: PFdoc["description"] as! String)
                 
                 globalFile.getDataInBackgroundWithBlock {
                     (data: NSData!, error: NSError!) -> Void in
@@ -228,8 +228,10 @@ class DocumentsViewController: UIViewController, UITableViewDataSource, UITableV
         self.presentViewController(imagePicker, animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: NSDictionary) {
-        let pickedImage: UIImage = info.objectForKey(UIImagePickerControllerOriginalImage) as UIImage
+//    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: NSDictionary) {
+//        let pickedImage: UIImage = info.objectForKey(UIImagePickerControllerOriginalImage) as UIImage
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        let pickedImage: UIImage = info[UIImagePickerControllerOriginalImage] as! UIImage
         picker.dismissViewControllerAnimated(true, completion: nil)
         let scaledImage = scaleImageWith(pickedImage, and: CGSizeMake(60, 60))
 
@@ -258,8 +260,8 @@ class DocumentsViewController: UIViewController, UITableViewDataSource, UITableV
             infoAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {
                 alertAction in
                 let textFields: NSArray = infoAlert.textFields! as NSArray
-                let titleTextfield: UITextField = textFields.objectAtIndex(0) as UITextField
-                let descriptionTextfield: UITextField = textFields.objectAtIndex(1) as UITextField
+                let titleTextfield: UITextField = textFields.objectAtIndex(0) as! UITextField
+                let descriptionTextfield: UITextField = textFields.objectAtIndex(1) as! UITextField
                 
                 let imageFile: PFFile = PFFile(name: titleTextfield.text + ".jpg", data: imageData)
                 let thumbnailFile: PFFile = PFFile(name: titleTextfield.text + "Thumbnail.jpg", data: thumbnail)
@@ -275,8 +277,8 @@ class DocumentsViewController: UIViewController, UITableViewDataSource, UITableV
                     (success: Bool, error: NSError!) -> Void in
                     if success {
                         var doc: Document = Document(
-                            name: PFdoc["name"] as String,
-                            description: PFdoc["description"] as String)
+                            name: PFdoc["name"] as! String,
+                            description: PFdoc["description"] as! String)
                         doc.thumbnail = scaledImage
                         doc.fileData = imageData
                         
@@ -313,7 +315,7 @@ class DocumentsViewController: UIViewController, UITableViewDataSource, UITableV
             docObjects[indexPath.row].fetchIfNeededInBackgroundWithBlock {
                 (docObject: PFObject!, error: NSError!) -> Void in
                 if error == nil {
-                    (docObject.objectForKey("file") as PFFile).getDataInBackgroundWithBlock {
+                    (docObject.objectForKey("file") as! PFFile).getDataInBackgroundWithBlock {
                         (tempData: NSData!, error: NSError!) -> Void in
                         if error == nil {
                             doc.fileData = tempData
@@ -372,7 +374,8 @@ class DocumentsViewController: UIViewController, UITableViewDataSource, UITableV
         return cell!
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: DocumentCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = cell as! DocumentCell
         var doc = docs[indexPath.row]
         
         cell.nameLabel.text = doc.name

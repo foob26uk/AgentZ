@@ -16,7 +16,7 @@ class MessagesCell: UITableViewCell {
     
     var cellView: UIView!
     
-    override init() {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Default, reuseIdentifier: "MessagesCell")
         
         self.backgroundColor = UIColor(red: 210/255, green: 203/255, blue: 177/255, alpha: 1.0)

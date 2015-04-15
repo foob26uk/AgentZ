@@ -73,7 +73,7 @@ class RequireViewController: UIViewController, UITableViewDelegate, UITableViewD
         findRequirements.findObjectsInBackgroundWithBlock {
             (objects: [AnyObject]!, error: NSError!) -> Void in
             if error == nil {
-                self.requirements = objects as [PFObject]
+                self.requirements = objects as! [PFObject]
                 self.reqTableView.reloadData()
             } else {
                 NSLog("%@", error)
@@ -120,10 +120,10 @@ class RequireViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func insertElementInRequirements(element: PFObject) -> Int {
-        let text = element.objectForKey("text") as String
+        let text = element.objectForKey("text") as! String
         var idx = 0
         while idx < requirements.count {
-            if text < requirements[idx].objectForKey("text") as String {
+            if text < requirements[idx].objectForKey("text") as! String {
                 break
             }
             idx++
@@ -159,7 +159,7 @@ class RequireViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 
-        if requirements[indexPath.row].objectForKey("selected") as Bool {
+        if requirements[indexPath.row].objectForKey("selected") as! Bool {
             requirements[indexPath.row]["selected"] = false
         } else {
             requirements[indexPath.row]["selected"] = true
@@ -204,9 +204,9 @@ class RequireViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.textLabel!.text = (requirements[indexPath.row].objectForKey("text") as String)
+        cell.textLabel!.text = (requirements[indexPath.row].objectForKey("text") as! String)
         
-        if requirements[indexPath.row].objectForKey("selected") as Bool {
+        if requirements[indexPath.row].objectForKey("selected") as! Bool {
             cell.accessoryType = UITableViewCellAccessoryType.Checkmark
         } else {
             cell.accessoryType = UITableViewCellAccessoryType.None

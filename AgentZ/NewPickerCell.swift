@@ -20,7 +20,7 @@ class NewPickerCell: UITableViewCell {
     var delegate: NewPickerCellDelegate?
     var indexPathTag: Int?
     
-    override init() {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Default, reuseIdentifier: "NewPickerCell")
         
         self.backgroundColor = UIColor.clearColor()

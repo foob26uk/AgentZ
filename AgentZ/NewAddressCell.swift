@@ -16,7 +16,7 @@ class NewAddressCell: UITableViewCell {
     var stateTextField: UITextField!
     var zipTextField: UITextField!
     
-    override init() {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Default, reuseIdentifier: "NewAddressCell")
         
         self.backgroundColor = UIColor.clearColor()
